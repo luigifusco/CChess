@@ -1,5 +1,5 @@
 # CChess
-Implementation of a chess playing program in C, using the SDL2 library for graphics.
+Implementation of a chess playing program in C, using the SDL2 library for graphics and OpenMP for multithreading.
 The engine is based on a MiniMax search with alpha-beta pruning.
 
 ### Sources
