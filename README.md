@@ -5,7 +5,7 @@ The engine is based on a MiniMax search with alpha-beta pruning.
 Compile with:
 
 ```bash
-gcc -fopenmp -lSDL2 *.c
+gcc *.c -fopenmp -lSDL2 -O3 -o cchess
 ```
 
 ### Sources
