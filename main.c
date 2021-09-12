@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     Gamestate_Init(&state);
     GUI_Init(&gui, config.windowWidth, config.windowHeight, config.reversed);
     Gamestate_GetMoves(&state);
-    GUI_Render(&gui, &state);
+    GUI_Render(&gui, &state, 1);
     if (config.gamemode == CPU) {
         for (;;) {
             printf("thinking...");
@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
             puts("done");
             Gamestate_ApplyMove(&state, &state, move);
             GUI_ManageEvents(&gui);
-            GUI_Render(&gui, &state);
+            GUI_Render(&gui, &state, 1);
         }
     } else {
         for (;;) {
@@ -37,11 +37,11 @@ int main(int argc, char *argv[]) {
                     Gamestate_ApplyMove(&newState, &state, move);
                     if (!Gamestate_IsValid(&newState)) {
                         puts("invalid move");
-                        GUI_Render(&gui, &state);
+                        GUI_Render(&gui, &state, 1);
                     } else break;
                 }
                 Gamestate_Copy(&state, &newState);
-                GUI_Render(&gui, &state);
+                GUI_Render(&gui, &state, 1);
             } else {
                 printf("thinking...");
                 move = MiniMax_GetMove(&state, &gui, config.minimaxDepth);
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
                 printf("score: %.1f\n", (double) Gamestate_Score(&state) / 100.);
                 Gamestate_ApplyMove(&state, &state, move);
                 GUI_ManageEvents(&gui);
-                GUI_Render(&gui, &state);
+                GUI_Render(&gui, &state, 1);
             }
         }
     }

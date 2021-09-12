@@ -15,7 +15,7 @@
 
 void GUI_Init(GUI *gui, int w, int h, bool reversed);
 
-void GUI_Render(GUI *gui, Gamestate *gamestate);
+void GUI_Render(GUI *gui, Gamestate *gamestate, int present);
 
 void GUI_ManageEvents(GUI *gui);
 

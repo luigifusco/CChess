@@ -59,7 +59,7 @@ void GUI_MakeDPIAware() {
 #endif
 }
 
-void GUI_Render(GUI *gui, Gamestate *gamestate) {
+void GUI_Render(GUI *gui, Gamestate *gamestate, int present) {
     int i, j;
     char piece;
     SDL_Rect source, dest;
@@ -140,8 +140,8 @@ void GUI_Render(GUI *gui, Gamestate *gamestate) {
             }
         }
     }
-
-    SDL_RenderPresent(gui->renderer);
+    if (present)
+        SDL_RenderPresent(gui->renderer);
 }
 
 void GUI_ManageEvents(GUI *gui) {
@@ -158,7 +158,7 @@ Move *GUI_GetMove(GUI *gui, Gamestate *state) {
     int i;
     int sq = gui->w / 8;
 
-    GUI_Render(gui, state);
+    GUI_Render(gui, state, 1);
     Gamestate_GetMoves(state);
 
     for (;;) {
@@ -175,8 +175,9 @@ Move *GUI_GetMove(GUI *gui, Gamestate *state) {
                             if (state->moves[i].from == posFrom) {
                                 clicked = true;
                                 printf("selected %c%c\n", posFrom % 8 + 'a', 7 - posFrom / 8 + '1');
-                                GUI_Render(gui, state);
+                                GUI_Render(gui, state, 0);
                                 GUI_HighlightPosition(gui, posFrom);
+                                SDL_RenderPresent(gui->renderer);
                                 break;
                             }
                             if (i == state->nMoves) puts("invalid piece");
@@ -189,8 +190,9 @@ Move *GUI_GetMove(GUI *gui, Gamestate *state) {
                             if (state->moves[i].from == posTo) {
                                 posFrom = posTo;
                                 printf("selected %c%c\n", posFrom % 8 + 'a', 7 - posFrom / 8 + '1');
-                                GUI_Render(gui, state);
+                                GUI_Render(gui, state, 0);
                                 GUI_HighlightPosition(gui, posFrom);
+                                SDL_RenderPresent(gui->renderer);
                                 break;
                             } else if (state->moves[i].from == posFrom &&
                                        state->moves[i].to == posTo) {
@@ -201,7 +203,7 @@ Move *GUI_GetMove(GUI *gui, Gamestate *state) {
                         if (i == state->nMoves) {
                             puts("invalid target");
                             clicked = false;
-                            GUI_Render(gui, state);
+                            GUI_Render(gui, state, 1);
                         }
                     }
             }
@@ -225,5 +227,4 @@ void GUI_HighlightPosition(GUI *gui, char pos) {
         rect.w -= 2;
         rect.h -= 2;
     }
-    SDL_RenderPresent(gui->renderer);
 }
